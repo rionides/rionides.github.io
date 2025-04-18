@@ -21,7 +21,7 @@ body {
     text-decoration: none;
   }
   nav .links a:hover {
-    color: #87A330;
+    color: #00ff88;;
   }
   .container {
     padding: 6rem 2rem 2rem 2rem;
@@ -64,7 +64,7 @@ body {
     border-radius: 10px;
   }
   .card h2 {
-    color: #87A330;
+    color: #00ff88;;
   }
   .card a {
     color: #0F8B8D;
@@ -89,7 +89,7 @@ body {
   }
   .subscribe button {
     padding: 0.5rem 1rem;
-    background-color: #87A330;
+    background-color: #00ff88;
     border: none;
     color: white;
     border-radius: 4px;
