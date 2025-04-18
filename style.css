@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    font-family: sans-serif;
+    font-family: times;
     background-color: #143642;
     color: white;
   }
@@ -78,7 +78,7 @@ body {
     padding: 1rem;
     margin-top: 3rem;
     border-radius: 10px;
-    max-width: 400px;
+    max-width: 1000px;
   }
   .subscribe input {
     padding: 0.5rem;

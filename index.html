@@ -5,6 +5,61 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rita Ionides</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .main-flex {
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .left-column {
+      flex: 1;
+      min-width: 250px;
+    }
+    .right-column {
+      flex: 1;
+      min-width: 250px;
+      margin-top: 1rem;
+    }
+    .terminal {
+      background-color: black;
+      color: #00ff88;
+      font-family: monospace;
+      padding: 1rem;
+      border-radius: 10px;
+      max-width: 1000px;
+      white-space: nowrap;
+      overflow-x: auto;
+      position: relative;
+    }
+    .terminal .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 1em;
+      background-color: #00ff88;
+      margin-left: 2px;
+      animation: blink 1s step-start infinite;
+    }
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+    .headline {
+      color: #0F8B8D;
+      font-family: 'VT323', monospace;
+      font-size: 3rem;
+    }
+    .profile-pics img {
+      width: 256px;
+      height: 256px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+  </style>
 </head>
 <body>
   <nav>
@@ -21,132 +76,49 @@
 
   <div class="container">
     <h1 class="headline">Building privacy-preserving AI for the medical future.</h1>
-    <div class="terminal">ritaios:~$ future of medicine loading...</div>
+    <div class="terminal">
+      <span>ritaios:~$ future of med-tech loading... privacy proofs in progress... math jokes incoming... pytorch packages imported... logfiles detecting a very cool person reading this  &gt;&gt;&gt;&gt;&gt;&gt;&gt;</span>
+      <span class="cursor"></span>
+    </div>
 
-    <div class="profile-pics">
-      <img src="images/rita1.jpg" alt="Rita 1" />
+    <div class="main-flex">
+      <div class="left-column">
+        <div class="profile-pics">
+          <img src="images/rita1.jpg" alt="Rita 1" />
+        </div>
+      </div>
+      <div class="right-column">
+        <div class="card">
+          <h2>Happening Now</h2>
+          <p>April 2025: Shooting for a NeurIPS submission. Applying to Y Combinator AI Summer School. Obsessed as ever with Cold War-era science fiction.
+          </p>
+          <p> My pet rabbit Blossom approves of this message. </p>
+          <a href="now.html"><button>View More</button></a>
+        </div>
+      </div>
     </div>
 
     <div class="grid">
       <div class="card">
         <h2>Projects</h2>
-        <p> Check out my work on differential privacy, AI, and med-tech infrastructure.</p>
+        <p>Check out my work on differential privacy, AI, and med-tech infrastructure.</p>
         <a href="projects.html"><button>View Projects</button></a>
       </div>
       <div class="card">
-        <h2> Regular Expressions </h2>
-        <p> My blog on math, philosophy, privacy, chaos... </p>
+        <h2>Regular Expressions</h2>
+        <p> Regular expressions of my thoughts on philosophy, privacy, student life, chaos...</p>
         <a href="blog.html"><button>Read Blog</button></a>
-      </div>
-      <div class="card">
-        <h2>What I'm up to</h2>
-        <p>April 2025: Shooting for a NeurIPS submission. Applying to Y Combinator AI Summer School. Obesessed as ever with Cold War-era science fiction .</p>
-        <a href="now.html"><button>View More</button></a>
       </div>
     </div>
 
     <div class="subscribe">
       <h2>Subscribe to the Regular Expressions Blog</h2>
-      <p>No spam, just .</p>
+      <p> Let my hot takes change your life. </p>
       <form>
         <input type="email" placeholder="your@email.com" />
         <button type="submit">Subscribe</button>
       </form>
     </div>
   </div>
-
-  <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      background-color: #143642;
-      color: white;
-    }
-    nav {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background-color: #143642;
-      display: flex;
-      justify-content: space-between;
-      padding: 1rem 2rem;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-      z-index: 1000;
-    }
-    nav .links a {
-      color: white;
-      margin-left: 1rem;
-      text-decoration: none;
-    }
-    nav .links a:hover {
-      color: #87A330;
-    }
-    .container {
-      padding: 6rem 2rem 2rem 2rem;
-    }
-    .terminal {
-      background-color: black;
-      color: #00ff88;
-      font-family: monospace;
-      padding: 1rem;
-      border-radius: 10px;
-      max-width: 600px;
-      margin-top: 1rem;
-    }
-    .headline {
-      color: #0F8B8D;
-    }
-    .profile-pics {
-      display: flex;
-      gap: 1rem;
-      margin: 2rem 0;
-    }
-    .profile-pics img {
-      width: 192px;
-      height: 192px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 4px solid #0F8B8D;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1rem;
-      margin-top: 2rem;
-    }
-    .card {
-      background-color: #1C3B30;
-      padding: 1rem;
-      border-radius: 10px;
-    }
-    .card h2 {
-      color: #87A330;
-    }
-    .subscribe {
-      background-color: #1C3B30;
-      padding: 1rem;
-      margin-top: 3rem;
-      border-radius: 10px;
-      max-width: 400px;
-    }
-    .subscribe input {
-      padding: 0.5rem;
-      width: 70%;
-      margin-right: 0.5rem;
-      border: none;
-      border-radius: 4px;
-    }
-    .subscribe button {
-      padding: 0.5rem 1rem;
-      background-color: #87A330;
-      border: none;
-      color: white;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .subscribe button:hover {
-      background-color: #6b8a27;
-    }
-  </style>
 </body>
 </html>
