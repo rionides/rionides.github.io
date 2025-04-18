@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rita Ionides</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #143642;
+      color: white;
+    }
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: #143642;
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+    }
+    nav .links a {
+      color: white;
+      margin-left: 1rem;
+      text-decoration: none;
+    }
+    nav .links a:hover {
+      color: #87A330;
+    }
+    .container {
+      padding: 6rem 2rem 2rem 2rem;
+    }
+    .terminal {
+      background-color: black;
+      color: #00ff88;
+      font-family: monospace;
+      padding: 1rem;
+      border-radius: 10px;
+      max-width: 600px;
+    }
+    .profile-pics {
+      display: flex;
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    .profile-pics img {
+      width: 192px;
+      height: 192px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #0F8B8D;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .card {
+      background-color: #1C3B30;
+      padding: 1rem;
+      border-radius: 10px;
+    }
+    .card h2 {
+      color: #87A330;
+    }
+    .subscribe {
+      background-color: #1C3B30;
+      padding: 1rem;
+      margin-top: 3rem;
+      border-radius: 10px;
+      max-width: 400px;
+    }
+    .subscribe input {
+      padding: 0.5rem;
+      width: 70%;
+      margin-right: 0.5rem;
+      border: none;
+      border-radius: 4px;
+    }
+    .subscribe button {
+      padding: 0.5rem 1rem;
+      background-color: #87A330;
+      border: none;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .subscribe button:hover {
+      background-color: #6b8a27;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="title">Rita Ionides</div>
+    <div class="links">
+      <a href="index.html">Home</a>
+      <a href="projects.html">Projects</a>
+      <a href="blog.html">Blog</a>
+      <a href="now.html">Now</a>
+      <a href="about.html">About</a>
+      <a href="cv.pdf" target="_blank">CV</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1 style="color:#0F8B8D">Building privacy-preserving AI for the medical future.</h1>
+    <div class="terminal">Rita:~$ making AI safe for health data...</div>
+
+    <div class="profile-pics">
+      <img src="images/rita1.jpg" alt="Rita 1" />
+      <img src="images/rita2.jpg" alt="Rita 2" />
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Projects</h2>
+        <p>Explore my work on differential privacy, generative models, and med-tech infrastructure.</p>
+        <a href="projects.html"><button>View Projects</button></a>
+      </div>
+      <div class="card">
+        <h2>Blog</h2>
+        <p>Posts on privacy, math, and startup chaos — with the occasional easter egg.</p>
+        <a href="blog.html"><button>Read Blog</button></a>
+      </div>
+      <div class="card">
+        <h2>Now</h2>
+        <p>April 2025: Applying to Y Combinator AI Summer School. Finishing up a private ML research project and mentoring undergrad stat students.</p>
+        <a href="now.html"><button>View More</button></a>
+      </div>
+    </div>
+
+    <div class="subscribe">
+      <h2>Subscribe to the Blog</h2>
+      <p>No spam. Just ideas and technical adventures.</p>
+      <form>
+        <input type="email" placeholder="your@email.com" />
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
