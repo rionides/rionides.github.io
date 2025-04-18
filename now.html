@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Now - Rita Ionides</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Hacker-themed font -->
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
+  <style>
+    .headline {
+        font-size: 3rem;
+      }
+    .terminal {
+      background-color: black;
+      color: #00ff88;
+      font-family: 'VT323', monospace;
+      padding: 1rem;
+      border-radius: 10px;
+      max-width: 100%;
+      height: 300px;
+      overflow-y: auto;
+      white-space: pre;
+      position: relative;
+    }
+    .terminal .cursor {
+      display: inline-block;
+      width: 10px;
+      background-color: #00ff88;
+      animation: blink 1s step-start infinite;
+      vertical-align: bottom;
+    }
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="title">Rita Ionides</div>
+    <div class="links">
+      <a href="index.html">Home</a>
+      <a href="projects.html">Projects</a>
+      <a href="blog.html">Blog</a>
+      <a href="now.html">Now</a>
+      <a href="about.html">About</a>
+      <a href="cv.pdf" target="_blank">CV</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1 class="headline"> System Status</h1>
+    <div id="now-terminal" class="terminal"></div>
+  </div>
+
+  <script>
+    const nowLines = [
+      `user@ritaios:~$ date`,
+      new Date().toString(),
+      ``,
+      `user@ritaios:~$ ps -u Rita`,
+      ` PID   TTY      TIME CMD`,
+      `1001 pts/0  00:00:02 neurips_paper.sh`,
+      `1002 pts/0  00:00:01 yc_application.sh`,
+      `1003 pts/0  00:00:00 dp_pipeline.js`,
+      ``,
+      `user@ritaios:~$ echo "Currently focused on: NeurIPS, YC, privacy!"`,
+      `     Currently focused on: NeurIPS, YC, privacy!`,
+      ``,
+      `user@ritaios:~$ cat ~/current_reading.txt`,
+      `     Currently reading: 'The Seven Moons of Maali Almeida' by Shehan Karunatilaka,`,
+      `     and rereading (as ever) 'The Hitchhiker's Guide to the Galaxy'.`,
+      ``,
+      `user@ritaios:~$ cat ~/music_taste.txt`,
+      `     Currently listening to: 'Что такое осень' by ДДТ. `,
+      `     I grew up with this 90s Russian rock band, and will get to see them in concert for my birthday in May!`,
+      ``,
+      `user@ritaios:~$ cat ~/quote_of_the_month.txt`,
+      `     From my good friend Shourya's email signature:`,
+      `     “If at first you don't succeed, skydiving isn't for you.”`,
+      ``
+    ];
+    const term = document.getElementById('now-terminal');
+    let idx = 0;
+    function typeLine() {
+      if (idx >= nowLines.length) {
+        const cr = document.createElement('span');
+        cr.className = 'cursor';
+        term.appendChild(cr);
+        return;
+      }
+      const div = document.createElement('div');
+      div.textContent = nowLines[idx++];
+      term.appendChild(div);
+      setTimeout(typeLine, 150);
+    }
+    typeLine();
+  </script>
+</body>
+</html>

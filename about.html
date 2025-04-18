@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About - Rita Ionides</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Hacker-themed font -->
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
+  <style>
+    .headline {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .code-block {
+      background-color: black;
+      color: #00ff88;
+      font-family: 'VT323', monospace;
+      padding: 1rem;
+      border-radius: 8px;
+      white-space: pre;
+      overflow-x: auto;
+      position: relative;
+    }
+    .code-block .cursor {
+      display: inline-block;
+      width: 10px;
+      background-color: #00ff88;
+      animation: blink 1s step-start infinite;
+      vertical-align: bottom;
+    }
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+    .bio {
+      margin-top: 1.5rem;
+      line-height: 1.6;
+      color: white;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .gallery img {
+      width: 100%;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 2px solid #0F8B8D;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="title">Rita Ionides</div>
+    <div class="links">
+      <a href="index.html">Home</a>
+      <a href="projects.html">Projects</a>
+      <a href="blog.html">Blog</a>
+      <a href="now.html">Now</a>
+      <a href="about.html">About</a>
+      <a href="cv.pdf" target="_blank">CV</a>
+    </div>
+  </nav>
+  <div class="container">
+    <h1 class="headline">About Me</h1>
+    <div class="code-block">
+<code>export const Rita = {
+  name: "Rita Ionides",
+  location: "Ann Arbor, MI",
+  majors: ["Honors Math", "Data Science", "PhD Statistics..?"],
+  interests: ["Differential Privacy", "AI for Healthcare", "Topology", "Literature"],
+  obsessions: [ "hacking", "travel", "changing the world"]
+};</code><span class="cursor"></span>
+    </div>
+    <div class="bio">
+      <p>Hi, I’m Rita. I’m an undergraduate at the University of Michigan double-majoring in Honors Math & Data Science, passionate about building privacy-preserving AI in healthcare.</p>
+      <p> Todo: fill in a little more here. </p>
+    </div>
+    <div class="gallery">
+      <!-- Add your photos here -->
+      <img src="images/rita2.jpg" alt="Photo 1" />
+      <!-- img src="images/jump.jpg" alt="Photo 2" -->
+      <img src="images/bread.jpg" alt="Photo 4" />
+      <img src="images/sunrise.jpg" alt="Photo 3" />
+      
+    </div>
+  </div>
+</body>
+</html>
