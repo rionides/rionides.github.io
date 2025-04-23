@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Differential Privacy 101</title>
+  <link rel="stylesheet" href="../blog/style.css">
+</head>
+<body>
+  <nav>
+    <div class="title">Rita Ionides</div>
+    <div class="links">
+      <a href="../index.html">Home</a>
+      <a href="../projects.html">Projects</a>
+      <a href="../blog.html">Blog</a>
+      <a href="../now.html">Now</a>
+      <a href="../about.html">About</a>
+      <a href="../cv.pdf" target="_blank">CV</a>
+    </div>
+  </nav>
+  <div class="container">
+    <h1 class="headline">Differential Privacy 101</h1>
+    <h2><em> Questions people ask at parties.</em></h2>
+
+    <p style="text-indent:30px;">     Contrary to popular opinion, I do actually get asked about differential privacy at parties. (I go to some pretty nerdy parties, but the point stands). I’m also asked about it in coffee chats, in office hours by my curious students, and once—memorably—on a date, where I think the phrase “epsilon-ball around a database” ended things prematurely.</p>
+
+    <p style="text-indent:30px;">     In any case, it’s come up enough that I thought it would be helpful to write up my favorite explanation of what differential privacy is, why it matters, and how it differs from other so-called privacy-preserving techniques. We’ll start with a story and a party game, and then for those who are interested in the actual implementation, I’ll share my take on the mathematical definitions. They’re famously difficult to parse, but the right intuition helps a lot, and my goal with the story is to help you build that intuition.</p>
+
+    <h2>Question #1: "Rita can you please explain your research like I’m 5."</h2>
+    <p style="text-indent:30px;">     Differential privacy, at its bones, is a mathematical way to guarantee the safety of a piece of information in some kind of model. That model could be as simple as a median or as complex as an LLM or a diffusion model—the main thing that matters is that you can’t tell what went in from anything that comes out.</p>
+
+    <p style="text-indent:30px;">     This is obviously relevant in fields where we want to apply machine learning models to inherently sensitive data. I work with HIPAA-protected patient data for healthcare applications, where differential privacy is huge; other users include big tech companies and the US census. In practice, you make something differentially private by injecting noise somewhere in the model (more on that later!) – that’s more or less the basics.</p>
+
+    <h2>Question #2: "I’ve heard of things being 'privacy-preserving': how is differential privacy different?"</h2>
+    <p>Here’s the example I like to give to my friends.</p>
+
+    <p style="text-indent:30px;">     Say the United Nations creates a new disarmament initiative. Every country will secretly submit the true number of nuclear weapons they possess to a secure, incorruptible black-box machine. The machine then computes the arithmetic mean and reports it publicly. This seems fair, right? The mean here is a privacy-preserving method, meaning that it generally obscures private information.</p>
+
+    <p style="text-indent:30px;">     This is a toy example, but the literature is full of ‘privacy-preserving’ methods: for example, two of the most popular are federated learning (which aggregates gradient updates instead of raw data) and privacy-preserving data synthesis (which generates synthetic data instead of using the real thing). These more complex models are serving the same purpose as our more humble mean.</p>
+
+    <p style="text-indent:30px;">     Let’s continue our example. In the peacekeeping initiative, every country contributes their number, and we learn that the mean is 42. But after a while, Russia decides to pull out of the agreement. They withdraw their data, and suddenly everyone can see that the mean has dropped to 33.</p>
+
+    <p style="text-indent:30px;">     Yikes. You see the problem: even though the mean was anonymized, everyone knows exactly how many weapons Russia must have had. This is called a membership inference attack, and it is the problem with relying solely on “privacy-preserving methods.” These methods tend to protect data in aggregate, but are often vulnerable to attacks that exploit subtle changes—like adding or removing one person (or country). This is why we need differential privacy: it explicitly guards against this kind of inference. In fact, it formally ensures that the presence or absence of any single participant does not substantially affect the outcome.</p>
+
+    <h2>Question #3: "This is where you start talking about math, yes?"</h2>
+    <p style="text-indent:30px;">Yes!! Formally, a randomized algorithm A is said to be ε-differentially private if for any two neighboring datasets <em>D</em> and <em>D'</em> that differ by exactly one individual record (like the countries with and without Russia), and for any set of possible outputs S, we have:</p>
+    <pre><code>    Pr[A(D) ∈ S] ≤ e^ε ⋅ Pr[A(D′) ∈ S]</code></pre>
+    <p style="text-indent:30px;">This means, broadly, that the probability that a particular result happens when your data is included is nearly the same as when it isn't. So whether or not you’re in the dataset, the output won’t noticeably change.</p>
+
+    <p style="text-indent:30px;">The parameter ε is often called the privacy budget—the lower it is, the more privacy you’re guaranteed. Values like ε = 0.1 are very private, while ε = 5 means your data might have a significant effect on the output.</p>
+
+    <h2>Question #4: "Is there a fun differentially private game I can play at home?"</h2>
+    <p>I’m so glad you asked. Here’s one to try with a friend!</p>
+    <h3>The Coin Toss Game</h3>
+    <p><strong>You will need:</strong></p>
+    <ul>
+      <li>A friend</li>
+      <li>A coin</li>
+      <li>A secret</li>
+    </ul>
+    <p>Have your friend think of a secret (with a yes/no answer)—ideally something mildly scandalous. Did they eat your leftovers? Do they actually like your taste in music?</p>
+    <p>Then have them follow these instructions:</p>
+    <ol>
+      <li>Flip a coin.</li>
+      <li>If heads, answer truthfully.</li>
+      <li>If tails, flip again:
+        <ul>
+          <li>If second coin is heads, answer “Yes.”</li>
+          <li>If second coin is tails, answer “No.”</li>
+        </ul>
+      </li>
+    </ol>
+    <p>No matter what they say, you can’t be sure whether they’re telling the truth. The randomness adds plausible deniability, and adding noise to obscure their datapoint is what differential privacy is all about.</p>
+
+    <p>This game, in fact, turns out to be ε-differentially private for ε = ln(3). Here's why:</p>
+    <ul>
+      <li>If the true answer is “Yes,” you’ll respond “Yes” with probability 0.5 + 0.25 = 0.75</li>
+      <li>If the true answer is “No,” you’ll respond “Yes” with probability 0.25</li>
+    </ul>
+    <p>So:</p>
+    <pre><code>0.75 / 0.25 = 3 ⇒ ε = ln(3)</code></pre>
+    <p>This bounded ratio is exactly what differential privacy asks for: no output is “too much more likely” depending on a single bit of private data.</p>
+
+    <h2>Final thoughts</h2>
+    <p>I know I’m biased, but differential privacy isn’t just a research buzzword. It’s a deeply useful and beautiful idea, which formalizes something we all intuitively want: to be included in data science without being exposed by it. If I can help explain that at a party, in a blog post, or through a coin toss, I’ll consider my work worthwhile.</p>
+
+    <p>Thanks for reading. Feel free to reach out if you’d like to play the coin game sometime—I have plenty of secrets and a very reliable quarter.</p>
+    <p><strong>Until next time,<br>- Rita</strong></p>
+
+    <div class="share">
+        <button onclick="navigator.clipboard.writeText(window.location.href)">📎 Share this article! </button>
+      </div>
+
+  </div>
+
+
+
+  <div class="subscribe">
+    <h2>Subscribe to the Regular Expressions Blog</h2>
+    <p>No spam, all vibes.</p>
+    <form>
+      <input type="email" placeholder="your@email.com" />
+      <button type="submit">Subscribe</button>
+    </form>
+  </div> 
+
+</body>
+</html>
