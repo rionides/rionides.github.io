@@ -1,127 +1,177 @@
-/* Light mode NYT-style overrides for blog */
+body {
+  margin: 0;
+  font-family: Georgia, serif;
+  background-color: #ffffff;
+  color: #111111;
+}
+
+/* Navbar */
+nav {
+  background-color: #143642;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+nav .links a {
+  color: white;
+  margin-left: 1rem;
+  text-decoration: none;
+}
+
+nav .links a:hover {
+  color: #87A330;
+}
+
+/* Content container */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 6rem 2rem 2rem 2rem;
+  background: white;
+  color: #111;
+}
+
+/* Headline styling */
+h1.headline, .headline {
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: bold;
+  font-size: 2.5rem;
+  color: #0F8B8D;
+  margin-bottom: 1rem;
+}
+
+/* Cards (used for blog summaries on index) */
+.card {
+  background-color: #f4f4f4;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+}
+
+.card a {
+  color: #0F8B8D;
+  text-decoration: none;
+}
+
+.card a:hover {
+  text-decoration: underline;
+}
+
+/* Code and preformatted blocks */
+pre, code {
+  background-color: #f0f0f0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  overflow-x: auto;
+}
+
+/* Subscribe box (from homepage) */
+.subscribe {
+  background-color: #f4f4f4;
+  padding: 1rem;
+  margin-top: 3rem;
+  border-radius: 10px;
+  max-width: 1000px;
+}
+
+.subscribe input {
+  padding: 0.5rem;
+  width: 70%;
+  margin-right: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.subscribe button {
+  padding: 0.5rem 1rem;
+  background-color: #87A330;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.subscribe button:hover {
+  background-color: #6b8a27;
+}
+
+/* Share button */
+.share {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ccc;
+}
+
+.share button {
+  background-color: #0F8B8D;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.share button:hover {
+  background-color: #0c6e70;
+}
+
+
+/* Prose-style text block formatting */
+.prose {
+line-height: 1.75;
+font-size: 1.1rem;
+}
+
+.prose h1, .prose h2, .prose h3 {
+color: #0F8B8D;
+font-family: 'Georgia', serif;
+margin-top: 2rem;
+}
+
+.prose p {
+margin-bottom: 1.25rem;
+text-indent: 0px;
+}
+
+.prose ul, .prose ol {
+margin-left: 2rem;
+margin-bottom: 1rem;
+}
+
+
+/* Fix for content hugging left edge */
+.container, .prose {
+padding-left: 2rem;
+padding-right: 2rem;
+box-sizing: border-box;
+}
 
 body {
-    margin: 0;
-    font-family: Georgia, serif;
-    background-color: #ffffff;
-    color: #111111;
-  }
-  
-  /* Navbar */
-  nav {
-    background-color: #143642;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    color: white;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-  }
-  
-  nav .links a {
-    color: white;
-    margin-left: 1rem;
-    text-decoration: none;
-  }
-  
-  nav .links a:hover {
-    color: #87A330;
-  }
-  
-  /* Content container */
-  .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 6rem 2rem 2rem 2rem;
-    background: white;
-    color: #111;
-  }
-  
-  /* Headline styling */
-  h1.headline, .headline {
-    font-family: 'Times New Roman', Times, serif;
-    font-weight: bold;
-    font-size: 2.5rem;
-    color: #0F8B8D;
-    margin-bottom: 1rem;
-  }
-  
-  /* Cards (used for blog summaries on index) */
-  .card {
-    background-color: #f4f4f4;
-    padding: 1rem;
-    border-radius: 10px;
-    margin-bottom: 2rem;
-  }
-  
-  .card a {
-    color: #0F8B8D;
-    text-decoration: none;
-  }
-  
-  .card a:hover {
-    text-decoration: underline;
-  }
-  
-  /* Code and preformatted blocks */
-  pre, code {
-    background-color: #f0f0f0;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font-family: 'Courier New', monospace;
-    overflow-x: auto;
-  }
-  
-  /* Subscribe box (from homepage) */
-  .subscribe {
-    background-color: #f4f4f4;
-    padding: 1rem;
-    margin-top: 3rem;
-    border-radius: 10px;
-    max-width: 1000px;
-  }
-  
-  .subscribe input {
-    padding: 0.5rem;
-    width: 70%;
-    margin-right: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .subscribe button {
-    padding: 0.5rem 1rem;
-    background-color: #87A330;
-    border: none;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .subscribe button:hover {
-    background-color: #6b8a27;
-  }
-  
-  /* Share button */
-  .share {
-    margin-top: 2rem;
-    padding-top: 1rem;
-    border-top: 1px solid #ccc;
-  }
-  
-  .share button {
-    background-color: #0F8B8D;
-    color: white;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  
-  .share button:hover {
-    background-color: #0c6e70;
-  }
-  
+padding-left: 0;
+padding-right: 0;
+}
+
+
+/* Responsive layout for small screens */
+@media (max-width: 600px) {
+.container, .prose {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+body {
+  font-size: 1rem;
+}
+
+h1, h2, h3 {
+  font-size: 1.25rem;
+}
+}
