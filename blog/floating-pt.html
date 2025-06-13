@@ -44,7 +44,7 @@
 <p style="text-align: center;"><em>Breaking differential privacy guarantees with CPU arithmetic.</em></p>
 
 <p>Imagine this: you’re a bank, and you’ve just finished implementing a beautiful differentially private algorithm. It’s elegant, it’s efficient, you’ve even shown it’s provably \((\varepsilon, \delta)\)-DP. You’ve run your unit tests, and everything passes— pat yourself on the back! Time to secure some sensitive financial data (say, all your customer’s transactions)  before a differentially private information release. </p> 
-<p>However, bad news for you and good news for me: despite your efforts, I’ve found your customers’ top-spending ZIP codes to within one household. You didn’t make a mistake in the proof, nor was your code buggy, so how did I still end up with this private information? It has to do with how your computer— how all computers— function under the hood.</p>
+<p>However, bad news for you and good news for me: despite your efforts, I’ve found your customers’ top-spending ZIP codes (and from there, with a little more work, your top-spending customers). You didn’t make a mistake in the proof, nor was your code buggy, so how did I still end up with this private information? It has to do with how your computer— how all computers— function under the hood.</p>
 
 <p>Welcome to the underworld of floating-point attacks.</p>
 
@@ -96,7 +96,7 @@
 
 <h3>It Also Gets Worse</h3>
 
-<p> There's more, too! While this isn't strictly speaking a float problem, timing attacks are another example of how theoretical DP can fail under realistic cconditions. It's usually pretty reasonable to imagine that an algorithm might take more time to run on, say, larger numers, or more complex data: but this means that the <em>time your mechanism takes to run</em> can leak information just like float math can. For instance, if you’re using rejection sampling to implement the Exponential mechanism, the number of iterations it takes to find a valid sample can vary based on the input scores. A clever attacker can use this to get inferences on your input data with nothing more than a clock!</p>
+<p> There's more, too! While this isn't strictly speaking a float problem, timing attacks are another example of how theoretical DP can fail under realistic conditions. It's usually pretty reasonable to imagine that an algorithm might take more time to run on, say, larger numers, or more complex data: but this means that the <em>time your mechanism takes to run</em> can leak information just like float math can. For instance, if you’re using rejection sampling to implement the Exponential mechanism, the number of iterations it takes to find a valid sample can vary based on the input scores. A clever attacker can use this to get inferences on your input data with nothing more than a clock!</p>
 
 <p>Timing attacks are nothing new: for years, hackers and security researchers have used timing to recover private <a href="https://paulkocher.com/doc/TimingAttacks.pdf">RSA keys</a>, break into <a href="https://crypto.stanford.edu/~dabo/papers/ssl-timing.pdf"> HTTP webservers</a>, and get around <a href="https://www.usenix.org/system/files/sec20-van_goethem.pdf"> WiFi authentication</a>, but DP researchers are increasingly finding such vulnerabilities too, such as in the Exponential mechanism discussed above (<a href="https://arxiv.org/abs/2004.00010">Ilvento & Geumlek, 2020</a>).</p>
 
@@ -105,7 +105,7 @@
 <h3>What Can We Do?</h3>
 Fortunately, this issue is solvable in many cases. Researchers (now including me!) have been slowly but surely building up a toolkit of techniques to mitigate floating-point attacks. Here are my general, practical suggestions: 
 <ul>
-  <li><strong>1. Conservative Discretization:</strong> Instead of assuming continuous distributions, in certainyou can explicitly discretize your mechanisms to a finite, carefully designed set of output values. This works very well for mechanisms like the Laplace or Gaussian, where you can round to a safe grid of values:
+  <li><strong>1. Conservative Discretization:</strong> Instead of assuming continuous distributions, in certain cases you can explicitly discretize your mechanisms to a finite, carefully designed set of output values. This works very well for mechanisms like the Laplace or Gaussian, where you can round to a safe grid of values:
     the <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2012/10/lsbs.pdf">Snapping Mechanism</a> (also by Ilya Mironov. What a legend), for example, rounds outputs to a safe grid and adjusts the privacy accounting accordingly.
     The caveat is that this can't be used for every distribution: this approach can fall apart in high-dimensional inference.</li>
   <li><strong>2. Safer Samplers:</strong> 
