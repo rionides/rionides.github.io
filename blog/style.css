@@ -7,30 +7,42 @@ body {
 
 /* Navbar */
 nav {
-  background-color: #143642;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  color: white;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
+      width: 100%;
+      background-color: #fdfdfd;
+      border-bottom: 1px solid #ddd;
+      background-color: #143642;
+      padding: 1em 2em;
+      box-sizing: border-box;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+    }
 
-nav .links a {
-  color: white;
-  margin-left: 1rem;
-  text-decoration: none;
-}
+    nav .nav-title {
+      font-size: 1.1em;
+      color: white;
+    }
 
-nav .links a\:hover {
-color: #87A330;
-}
+    nav .nav-links a {
+      margin-left: 1em;
+      text-decoration: none;
+      color: white;
+    }
+
+    nav .nav-links a:hover {
+      text-decoration: underline;
+    }
+
+
+
 
 /* Content container */
 .container {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 2em;
     background: white;

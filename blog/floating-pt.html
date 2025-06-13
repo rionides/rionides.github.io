@@ -7,9 +7,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <style>
+    nav {
+      width: 100%;
+      background-color: #fdfdfd;
+      border-bottom: 1px solid #ddd;
+      background-color: #143642;
+      padding: 1em 2em;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+    }
+
+    nav .nav-title {
+      font-size: 1.1em;
+      color: white;
+    }
+
+    nav .nav-links a {
+      margin-left: 1em;
+      text-decoration: none;
+      color: white;
+    }
+
+    nav .nav-links a:hover {
+      text-decoration: underline;
+    }
     body {
       font-family: system-ui, sans-serif;
-      max-width: 800px;
+      max-width: 1000px;
       margin: auto;
       padding: 2em;
       line-height: 1.6;
@@ -37,8 +64,19 @@
   </script>
 </head>
 
+<nav>
+    <div class="nav-title">Rita Ionides</div>
+    <div class="nav-links">
+      <a href="../index.html">Home</a>
+      <a href="../blog.html">Blog</a>
+      <a href="../now.html">Now</a>
+      <a href="../about.html">About</a>
+      <a href="../projects.html">Education</a>
+    </div>
+</nav>
 
 <body>
+
 
 <h1 style="text-align: center;">Why Floating-Point Numbers are Leaking Your Data</h1>
 <p style="text-align: center;"><em>Breaking differential privacy guarantees with CPU arithmetic.</em></p>
@@ -127,7 +165,7 @@ Fortunately, this issue is solvable in many cases. Researchers (now including me
 
 <p><strong>Until next time,<br/>Rita</strong></p>
 
-
+<hr/>
 <div container>
   <div id="mc_embed_shell">
 
