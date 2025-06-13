@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Why Floating-Point Numbers are Leaking Your Data</title>
+  <meta name="description" content="Breaking differential privacy guarantees with CPU arithmetic.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 800px;
+      margin: auto;
+      padding: 2em;
+      line-height: 1.6;
+    }
+    code {
+      background: #f2f2f2;
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+    }
+    pre code {
+      display: block;
+      padding: 1em;
+      overflow-x: auto;
+    }
+    hr {
+      margin: 2em 0;
+    }
+    img {
+      max-width: 100%;
+    }
+  </style>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+</head>
+
+
+<body>
+
+<h1 style="text-align: center;">Why Floating-Point Numbers are Leaking Your Data</h1>
+<p style="text-align: center;"><em>Breaking differential privacy guarantees with CPU arithmetic.</em></p>
+
+<p>Imagine this: you’re a bank, and you’ve just finished implementing a beautiful differentially private algorithm. It’s elegant, it’s efficient, you’ve even shown it’s provably \((\varepsilon, \delta)\)-DP. You’ve run your unit tests, and everything passes— pat yourself on the back! Time to secure some sensitive financial data (say, all your customer’s transactions)  before a differentially private information release. </p> 
+<p>However, bad news for you and good news for me: despite your efforts, I’ve found your customers’ top-spending ZIP codes to within one household. You didn’t make a mistake in the proof, nor was your code buggy, so how did I still end up with this private information? It has to do with how your computer— how all computers— function under the hood.</p>
+
+<p>Welcome to the underworld of floating-point attacks.</p>
+
+<hr/>
+
+<h3>Floating points? I haven’t thought about those since CS 101!</h3>
+<p>Floating-point numbers are how we represent the real line on a computer, and while that seems straightforward, it isn’t. The capacity of a float or double isn’t mathematically equivalent to the real number line. Computers have to round up or down somewhere, since they can’t store infinite information just to record a number like \(1/3\): instead, they use IEEE-754 floating-point approximations.</p>
+
+<p>Most modern DP mechanisms—Laplace, Gaussian, Exponential, and even some fancier samplers like those in Rényi DP accounting—rely on sampling from continuous distributions, and the proofs that guarantee privacy for these mechanisms assume operations on real numbers.</p>
+
+<p>But your computer doesn’t do real numbers. And if you’re not careful, your carefully-tuned privacy guarantees can be undone by nothing more than your CPU. Let’s walk through it!</p>
+
+
+
+<hr/>
+
+<h3>A Quick DP Recap</h3>
+<p>Recall that differential privacy protects individuals in a dataset by ensuring that the distribution of outputs doesn’t change too much when any one individual’s data is changed (for a more detailed explanation, read <a href="dp-101.html">Differential Privacy 101</a>.) For all datasets \(D, D^′\) differing on one entry, and all events \(S\), the mechanism \(M\) is \(\varepsilon, \delta\) differentially private if:</p>
+
+<p>
+  \[
+  \mathbb{P}[M(D) \in S] \leq e^\varepsilon * \mathbb{P}[M(D') \in S] + \delta
+  \]
+</p>
+
+<p>This is a <em>distributional</em> guarantee. If someone can distinguish between \(D\) and \(D'\) based on the exact output, your mechanism is no longer DP.</p>
+
+<p>This is where floating-point exploits come in.</p>
+
+<hr/>
+
+<h3>What Goes Wrong?</h3>
+<p>Let’s say you want to add Laplace noise to a query output. If you’re going with the industry standard, you'll probably use inverse transform sampling like so:</p>
+
+<p>
+  \[
+  \text{Sample } u \sim \text{Uniform}(0, 1), \quad \text{return: } \mu - b \cdot \text{sign}(u - 0.5) \cdot \ln(1 - 2|u - 0.5|)
+  \]
+</p>
+
+<p>In theory, great. But in practice, <code>np.random.uniform()</code> and its counterparts generate a <em>finite</em> number of possible values. An attacker can simply precompute the finite set of all outputs your DP mechanism can produce, and map them back to inputs or input ranges accordingly (the seminal and very cool <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2012/10/lsbs.pdf">paper</a> on this exploit is by Ilya Mironov). For example, there are only \(2^{52}\) representable doubles in the interval \([0, 1]\): if your mechanism always maps the same \(u\) to the same noisy output, an attacker may be able to invert it.</p>
+
+<p>Even worse, floating point math is full of rounding errors, cancellation issues, and machine-dependent edge cases. Even float overflow is exploitable: in certain edge cases, one database will case a float to overflow at some point in the mechanism, while a database with just one observation changed will not. This is 
+    an immediate way to do what's called membership inference, where an attacker can determine whether a specific individual is in the dataset based on the output of the mechanism. </p>
+</p>
+
+<hr/>
+
+
+<h3>It Also Gets Worse</h3>
+
+<p> There's more, too! While this isn't strictly speaking a float problem, timing attacks are another example of how theoretical DP can fail under realistic cconditions. It's usually pretty reasonable to imagine that an algorithm might take more time to run on, say, larger numers, or more complex data: but this means that the <em>time your mechanism takes to run</em> can leak information just like float math can. For instance, if you’re using rejection sampling to implement the Exponential mechanism, the number of iterations it takes to find a valid sample can vary based on the input scores. A clever attacker can use this to get inferences on your input data with nothing more than a clock!</p>
+
+<p>Timing attacks are nothing new: for years, hackers and security researchers have used timing to recover private <a href="https://paulkocher.com/doc/TimingAttacks.pdf">RSA keys</a>, break into <a href="https://crypto.stanford.edu/~dabo/papers/ssl-timing.pdf"> HTTP webservers</a>, and get around <a href="https://www.usenix.org/system/files/sec20-van_goethem.pdf"> WiFi authentication</a>, but DP researchers are increasingly finding such vulnerabilities too, such as in the Exponential mechanism discussed above (<a href="https://arxiv.org/abs/2004.00010">Ilvento & Geumlek, 2020</a>).</p>
+
+<hr/>
+
+<h3>What Can We Do?</h3>
+Fortunately, this issue is solvable in many cases. Researchers (now including me!) have been slowly but surely building up a toolkit of techniques to mitigate floating-point attacks. Here are my general, practical suggestions: 
+<ul>
+  <li><strong>1. Conservative Discretization:</strong> Instead of assuming continuous distributions, in certainyou can explicitly discretize your mechanisms to a finite, carefully designed set of output values. This works very well for mechanisms like the Laplace or Gaussian, where you can round to a safe grid of values:
+    the <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2012/10/lsbs.pdf">Snapping Mechanism</a> (also by Ilya Mironov. What a legend), for example, rounds outputs to a safe grid and adjusts the privacy accounting accordingly.
+    The caveat is that this can't be used for every distribution: this approach can fall apart in high-dimensional inference.</li>
+  <li><strong>2. Safer Samplers:</strong> 
+    There do exist numerically stable and inversion-resistant methods: ziggurat sampling for Gaussian noise, for example. Or just use a tool that already accounts for floating-point error in its privacy budget and proof— there are more and more each year.
+    (There are many in the <a href="https://github.com/opendp/opendp">OpenDP</a> library, and we're adding more as I write.)</li>
+  <li><strong>3. Just Use a Discrete Mechanism:</strong> Some DP mechanisms are discrete in the first place and avoid floats entirely: for example, if you're using a geometric or staircase distribution, you by definition produce outputs on an explicitly finite, fixed support. However, these don’t exactly correspond to the same use cases as their continuous counterparts. Your mileage may vary. 
+</li>
+  <li><strong>4. (Carefully) Use Arbitrary Precision:</strong> In  a pinch, there's always the option to use arbitrary precision arithmetic through <code>gmpy2</code>, <code>mpmath</code>, or similar. Be warned that this is very expensive; and it’s still not a panacea, since your output has to be representable in float-land when you release it.</li>
+  <li><strong>4. Be Honest About Your Mechanism:</strong> Document the assumptions you’re making about floating point behavior. Make your rounding choices explicit to users. Find edge cases yourself, or someone less well-meaning may find them for you!
+</li>
+</ul>
+
+<hr/>
+
+<h3>Final Thoughts</h3>
+<p>Floating point attacks are the Achilles heel of real-world differential privacy. They don’t contradict the theory, but they make a mockery of practice if you’re not careful. It’s not enough for your theory paper to guarantee \( ( \varepsilon, \delta ) \) privacy: IEEE-754 is a clever, useful standard, but it's also a perfect tool for subtle attacks on your carefully tuned mechanisms. As much as you love it, it might not love you back. </p>
+
+<p>In any case, if you’re still curious, check out some further reading and the math appendix <a href="float-update.html"> here</a>.  If you’d like to see actual implementations of these attacks, let me know at rionides@umich.edu: I’m happy to write up a follow-up if there’s demand. It just so happens that attack demos are exactly my idea of good wholesome fun. </p>
+
+<p><strong>Until next time,<br/>Rita</strong></p>
+
+</body>
+</html>
